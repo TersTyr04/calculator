@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Никита дырявый</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background: url('https://sun9-80.vkuserphoto.ru/s/v1/ig2/MN5ptgOMNff5rSEAWZLyzNAsxydTupi4EVca6IXeCqbLz4a7NcmrjuuUUO8AON1-GaKbLjPMiGRbLRskb3yyBN2u.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x181,360x271,480x361,540x406,640x482,720x542,1080x813,1280x963,1440x1084,2560x1927&from=bu&u=X8Vuq8EV3Y3srT1ObSvQLPqO8xUGrI3nT2Q1j-x-HvQ&cs=2560x0') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-left: 350px;
+    }
+
+    .calculator {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 340px;
+    }
+
+    .calculator h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .display {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: right;
+      min-height: 90px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .display .expression {
+      color: rgba(97, 27, 27, 0.6);
+      font-size: 16px;
+      min-height: 24px;
+      word-break: break-all;
+    }
+
+    .display .result {
+      color: #fff;
+      font-size: 36px;
+      font-weight: 300;
+      word-break: break-all;
+      margin-top: 5px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 18px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn.number {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .btn.number:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn.operator {
+      background: rgba(255, 165, 0, 0.7);
+      color: #fff;
+    }
+
+    .btn.operator:hover {
+      background: rgba(255, 165, 0, 0.9);
+    }
+
+    .btn.function {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn.function:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn.equals {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: #fff;
+      grid-column: span 2;
+    }
+
+    .btn.equals:hover {
+      background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    }
+
+    .btn.clear {
+      background: rgba(255, 71, 87, 0.7);
+      color: #fff;
+    }
+
+    .btn.clear:hover {
+      background: rgba(255, 71, 87, 0.9);
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .back-link a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .back-link a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Никита дырявый</h2>
+    
+    <div class="display">
+      <div class="expression" id="expression"></div>
+      <div class="result" id="result">0</div>
+    </div>
+    
+    <div class="buttons">
+      <button class="btn clear" onclick="clearAll()">AC</button>
+      <button class="btn function" onclick="deleteLast()">⌫</button>
+      <button class="btn function" onclick="inputPercent()">%</button>
+      <button class="btn operator" onclick="inputOperator('/')">÷</button>
+      
+      <button class="btn number" onclick="inputNumber('7')">7</button>
+      <button class="btn number" onclick="inputNumber('8')">8</button>
+      <button class="btn number" onclick="inputNumber('9')">9</button>
+      <button class="btn operator" onclick="inputOperator('*')">×</button>
+      
+      <button class="btn number" onclick="inputNumber('4')">4</button>
+      <button class="btn number" onclick="inputNumber('5')">5</button>
+      <button class="btn number" onclick="inputNumber('6')">6</button>
+      <button class="btn operator" onclick="inputOperator('-')">−</button>
+      
+      <button class="btn number" onclick="inputNumber('1')">1</button>
+      <button class="btn number" onclick="inputNumber('2')">2</button>
+      <button class="btn number" onclick="inputNumber('3')">3</button>
+      <button class="btn operator" onclick="inputOperator('+')">+</button>
+      
+      <button class="btn number" onclick="inputNumber('0')">0</button>
+      <button class="btn number" onclick="inputDot()">.</button>
+      <button class="btn equals" onclick="calculate()">=</button>
+    </div>
+    
+    <div class="back-link">
+      <a href="index.html">← Вернуться на главную</a>
+    </div>
+  </div>
+
+  <script>
+    let currentInput = '0';
+    let previousInput = '';
+    let operator = '';
+    let shouldResetScreen = false;
+
+    const resultDisplay = document.getElementById('result');
+    const expressionDisplay = document.getElementById('expression');
+
+    function updateDisplay() {
+      resultDisplay.textContent = currentInput;
+      if (operator && previousInput) {
+        const opSymbol = { '/': '÷', '*': '×', '-': '−', '+': '+' }[operator];
+        expressionDisplay.textContent = previousInput + ' ' + opSymbol;
+      } else {
+        expressionDisplay.textContent = '';
+      }
+      
+      // Auto-size font if number is too long
+      if (currentInput.length > 10) {
+        resultDisplay.style.fontSize = '24px';
+      } else if (currentInput.length > 7) {
+        resultDisplay.style.fontSize = '30px';
+      } else {
+        resultDisplay.style.fontSize = '36px';
+      }
+    }
+
+    function inputNumber(num) {
+      if (currentInput === '0' || shouldResetScreen) {
+        currentInput = num;
+        shouldResetScreen = false;
+      } else {
+        if (currentInput.length < 15) {
+          currentInput += num;
+        }
+      }
+      updateDisplay();
+    }
+
+    function inputDot() {
+      if (shouldResetScreen) {
+        currentInput = '0';
+        shouldResetScreen = false;
+      }
+      if (!currentInput.includes('.')) {
+        currentInput += '.';
+      }
+      updateDisplay();
+    }
+
+    function inputOperator(op) {
+      if (operator && !shouldResetScreen) {
+        calculate();
+      }
+      previousInput = currentInput;
+      operator = op;
+      shouldResetScreen = true;
+      updateDisplay();
+    }
+
+    function inputPercent() {
+      currentInput = String(parseFloat(currentInput) / 100);
+      updateDisplay();
+    }
+
+    function calculate() {
+      if (!operator || !previousInput) return;
+      
+      const prev = parseFloat(previousInput);
+      const current = parseFloat(currentInput);
+      let result;
+
+      switch (operator) {
+        case '+': result = prev + current; break;
+        case '-': result = prev - current; break;
+        case '*': result = prev * current; break;
+        case '/':
+          if (current === 0) {
+            currentInput = 'Ошибка';
+            operator = '';
+            previousInput = '';
+            updateDisplay();
+            return;
+          }
+          result = prev / current;
+          break;
+        default: return;
+      }
+
+      // Format result
+      result = Math.round(result * 1000000000) / 1000000000;
+      currentInput = String(result);
+      operator = '';
+      previousInput = '';
+      shouldResetScreen = true;
+      updateDisplay();
+    }
+
+    function clearAll() {
+      currentInput = '0';
+      previousInput = '';
+      operator = '';
+      shouldResetScreen = false;
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      if (currentInput.length === 1 || currentInput === 'Ошибка') {
+        currentInput = '0';
+      } else {
+        currentInput = currentInput.slice(0, -1);
+      }
+      updateDisplay();
+    }
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '0' && e.key <= '9') inputNumber(e.key);
+      else if (e.key === '.') inputDot();
+      else if (e.key === '+') inputOperator('+');
+      else if (e.key === '-') inputOperator('-');
+      else if (e.key === '*') inputOperator('*');
+      else if (e.key === '/') { e.preventDefault(); inputOperator('/'); }
+      else if (e.key === '%') inputPercent();
+      else if (e.key === 'Enter' || e.key === '=') calculate();
+      else if (e.key === 'Escape') clearAll();
+      else if (e.key === 'Backspace') deleteLast();
+    });
+  </script>
+</body>
+</html>
